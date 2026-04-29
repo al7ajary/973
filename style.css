@@ -1260,7 +1260,6 @@
         position: relative;
         overflow: hidden;
     }
-const contactForm = document.querySelector(".contact-form");
 const formSuccess = document.querySelector("#formSuccess");
 
 if (contactForm && formSuccess) {
