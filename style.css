@@ -1291,3 +1291,30 @@ if (contactForm && formSuccess) {
 .work-section {
     padding-top: 22px;
 }
+/* Space before/after section divider lines */
+.services-section,
+.work-section {
+    border-top: 2px solid #00c8c8;
+    margin-top: 22px;
+    padding-top: 22px !important;
+}
+
+.services-section {
+    margin-bottom: 22px;
+}
+
+.work-section {
+    margin-top: 22px;
+}
+
+/* Space between title and content */
+.services-section .section-title,
+.work-section .section-title {
+    margin-bottom: 38px !important;
+}
+
+/* Reduce old grid top spacing */
+.services-grid,
+.portfolio-grid {
+    margin-top: 0 !important;
+}
