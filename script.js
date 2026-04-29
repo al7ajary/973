@@ -88,3 +88,15 @@ const scrollObserver = new IntersectionObserver(
 revealItems.forEach((item) => {
     scrollObserver.observe(item);
 });
+
+const contactForm = document.querySelector(".contact-form");
+const formSuccess = document.querySelector(".form-success");
+
+if (contactForm && formSuccess) {
+  contactForm.addEventListener("submit", () => {
+    setTimeout(() => {
+      formSuccess.classList.add("show");
+      contactForm.reset();
+    }, 600);
+  });
+}
