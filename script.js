@@ -90,13 +90,17 @@ revealItems.forEach((item) => {
 });
 
 const contactForm = document.querySelector(".contact-form");
-const formSuccess = document.querySelector(".form-success");
+const formSuccess = document.querySelector("#formSuccess");
 
 if (contactForm && formSuccess) {
   contactForm.addEventListener("submit", () => {
     setTimeout(() => {
       formSuccess.classList.add("show");
       contactForm.reset();
+
+      setTimeout(() => {
+        formSuccess.classList.remove("show");
+      }, 3000);
     }, 600);
   });
 }
