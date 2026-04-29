@@ -1296,9 +1296,7 @@
 .services-grid,
 .portfolio-grid {
     margin-top: 0 !important;
-}
-const contactForm = document.querySelector(".contact-form");
-const formSuccess = document.querySelector("#formSuccess");
+
 
 if (contactForm && formSuccess) {
   contactForm.addEventListener("submit", function () {
