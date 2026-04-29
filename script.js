@@ -94,13 +94,11 @@ const formSuccess = document.querySelector("#formSuccess");
 
 if (contactForm && formSuccess) {
   contactForm.addEventListener("submit", () => {
-    setTimeout(() => {
-      formSuccess.classList.add("show");
-      contactForm.reset();
+    formSuccess.classList.add("show");
+    contactForm.reset();
 
-      setTimeout(() => {
-        formSuccess.classList.remove("show");
-      }, 3000);
-    }, 600);
+    setTimeout(() => {
+      formSuccess.classList.remove("show");
+    }, 3000);
   });
 }
