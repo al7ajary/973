@@ -118,3 +118,19 @@ function showFormSuccess() {
     form.reset();
   }, 800);
 }
+function showFormSuccess() {
+  const message = document.getElementById("formSuccess");
+  const form = document.querySelector(".contact-form");
+
+  if (!message) return;
+
+  message.classList.add("show");
+
+  setTimeout(() => {
+    message.classList.remove("show");
+  }, 3000);
+
+  setTimeout(() => {
+    if (form) form.reset();
+  }, 500);
+}
