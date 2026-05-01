@@ -20,7 +20,7 @@
 
     window.addEventListener("load", () => {
         const loader = document.querySelector(".loader");
-        const delay = prefersReducedMotion ? 0 : 150;
+        const delay = prefersReducedMotion ? 0 : 100;
         window.setTimeout(() => {
             if (loader) loader.classList.add("hidden");
             document.body.classList.add("loaded");
