@@ -61,9 +61,13 @@ function renderTitle(title, box) {
   const { size, m, lines, overflow } = layout(title);
   const lh = size * cfg.font.lineHeight, cx = box.x + box.w / 2;
   const top = box.y + box.h / 2 - (lines.length * lh) / 2;
-  g.fillStyle = '#fff'; g.textBaseline = 'middle'; g.textAlign = 'left';
+  // خط أساس واحد للعربي والأرقام حتى ما تطلع الأرقام أعلى من الكلام
+  probe.font = `${size}px GEAr`; const mt = probe.measureText('أبجد هوز');
+  const asc = mt.fontBoundingBoxAscent ?? mt.actualBoundingBoxAscent, desc = mt.fontBoundingBoxDescent ?? mt.actualBoundingBoxDescent;
+  const shift = (asc - desc) / 2;
+  g.fillStyle = '#fff'; g.textBaseline = 'alphabetic'; g.textAlign = 'left';
   lines.forEach((ln, i) => {
-    let xr = cx + ln.w / 2; const y = top + lh * (i + 0.5);
+    let xr = cx + ln.w / 2; const y = top + lh * (i + 0.5) + shift;
     ln.ws.forEach((w, wi) => {
       if (wi) xr -= m.space;
       for (const p of w.parts) { xr -= p.w; g.font = fontOf(p, size); g.direction = p.latin ? 'ltr' : 'rtl'; g.fillText(p.t, xr, y); }
