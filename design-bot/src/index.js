@@ -25,7 +25,7 @@ bot.command('start', ctx => ctx.reply(
   `ارسل صورة (أو عدة صور) مع كابشن:\n«${names()}: العنوان»\n\n` +
   `• أكثر من صورة = كاروسيل: الأولى غلاف بالقالب والعنوان، والباقي يتغير مقاسه لـ 4:5.\n` +
   `• لأفضل جودة ارسلها كـ File (بدون ضغط تيلقرام).\n` +
-  `• لإيقاف تحسين الألوان اكتب «بدون تحسين» في الكابشن.`));
+  `• لفحص الإملاء قبل التصميم اكتب «افحص» في الكابشن.\n• لإيقاف تحسين الألوان اكتب «بدون تحسين» في الكابشن.`));
 
 // ---- استقبال الصور ----
 const imageOf = m => m.photo ? { id: m.photo.at(-1).file_id } : (m.document?.mime_type?.startsWith('image/') ? { id: m.document.file_id } : null);
@@ -42,7 +42,7 @@ bot.on(['message:photo', 'message:document'], async ctx => {
 
 async function startJob(ctx, files, caption) {
   const p = parseCaption(caption);
-  const id = String(++seq); const job = { id, chat: ctx.chat.id, files, key: p.key, title: p.title, enhance: p.enhance };
+  const id = String(++seq); const job = { id, chat: ctx.chat.id, files, key: p.key, title: p.title, enhance: p.enhance, spell: p.spell || cfg.env.SPELL_DEFAULT === 'on' };
   jobs.set(id, job); setTimeout(() => jobs.delete(id), 3600e3);
   if (!job.key || !job.title) { waiting.set(ctx.chat.id, { type: 'text', jobId: id }); return ctx.reply(`اكتب نوع القالب والعنوان:\n«${names()}: العنوان»`); }
   return proofread(ctx, job);
@@ -50,6 +50,7 @@ async function startJob(ctx, files, caption) {
 
 // ---- فحص الإملاء قبل التصميم ----
 async function proofread(ctx, job) {
+  if (!job.spell) return render(ctx, job);
   let res = null;
   try { res = await check(job.title); } catch (e) { console.error(e); await ctx.reply('تعذر فحص الإملاء، أكمل بنصك كما هو.'); }
   if (!res) return render(ctx, job);
@@ -75,7 +76,7 @@ bot.on('message:text', async ctx => {
   if (w.type === 'edit') { job.title = ctx.message.text.trim(); return render(ctx, job); }
   const p = parseCaption(ctx.message.text);
   if (!p.key || !p.title) { waiting.set(ctx.chat.id, w); return ctx.reply(`ما فهمت. اكتب: «${names()}: العنوان»`); }
-  Object.assign(job, { key: p.key, title: p.title, enhance: p.enhance && job.enhance });
+  Object.assign(job, { key: p.key, title: p.title, enhance: p.enhance && job.enhance, spell: p.spell || job.spell });
   return proofread(ctx, job);
 });
 
