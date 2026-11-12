@@ -1,0 +1,4 @@
+{
+  "news":     { "file": "news.png",     "aliases": ["خبر", "اخبار", "أخبار", "news"],      "box": { "x": 35, "y": 1118, "w": 780, "h": 140 } },
+  "congrats": { "file": "congrats.png", "aliases": ["تهنئة", "تهنئه", "congrats"],          "box": { "x": 35, "y": 1118, "w": 780, "h": 140 } }
+}

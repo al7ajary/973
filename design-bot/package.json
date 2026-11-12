@@ -1,0 +1,17 @@
+{
+  "name": "design-bot",
+  "version": "0.1.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "demo": "node src/demo.js",
+    "set-webhook": "node src/setWebhook.js"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.65",
+    "grammy": "^1.30.0",
+    "sharp": "^0.33.5"
+  }
+}
