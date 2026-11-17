@@ -104,8 +104,25 @@ async function render(ctx, job) {
 
 bot.catch(e => console.error('bot error', e.error || e));
 
+// إعداد البوت في تيلقرام تلقائياً (الأوامر والوصف) + تشغيل السيرفر
+async function setup() {
+  try {
+    await bot.api.setMyCommands([{ command: 'start', description: 'طريقة الاستخدام' }]);
+    await bot.api.setMyShortDescription('مصمم بوستات اللجنة البارالمبية البحرينية');
+    await bot.api.setMyDescription('أرسل صورة مع كابشن مثل «خبر: العنوان» أو «تهنئة: العنوان»، وأرجع لك التصميم جاهز بمقاس 4:5. أكثر من صورة = كاروسيل.');
+  } catch (e) { console.error('setup', e.description || e.message); }
+}
+const port = PORT || 3000;
 if (WEBHOOK_URL) {
   const handle = webhookCallback(bot, 'http', { secretToken: WEBHOOK_SECRET });
-  http.createServer((req, res) => req.url === '/tg' && req.method === 'POST' ? handle(req, res) : (res.writeHead(200), res.end('ok')))
-    .listen(PORT || 3000, () => console.log('webhook server on', PORT || 3000));
-} else { bot.start({ onStart: () => console.log('polling…') }); }
+  http.createServer((req, res) => req.url === '/tg' && req.method === 'POST' ? handle(req, res) : (res.writeHead(200), res.end('BPC bot is running')))
+    .listen(port, async () => {
+      console.log('webhook server on', port); await setup();
+      try { await bot.api.setWebhook(WEBHOOK_URL.replace(/\/$/, '') + '/tg', { secret_token: WEBHOOK_SECRET, allowed_updates: ['message', 'callback_query'] }); console.log('webhook set'); }
+      catch (e) { console.error('setWebhook', e.description || e.message); }
+    });
+} else {
+  // بدون رابط: يشتغل بطريقة Polling، والسيرفر يرد بس عشان الاستضافة تعرف إن التطبيق شغال
+  http.createServer((req, res) => { res.writeHead(200); res.end('BPC bot is running'); }).listen(port);
+  setup().then(() => bot.api.deleteWebhook()).catch(() => {}).finally(() => bot.start({ onStart: () => console.log('polling…') }));
+}
